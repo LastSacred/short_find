@@ -2,7 +2,6 @@ require "short_find/version"
 
 module ShortFind
   class Error < StandardError; end
-  class ShortFind
     @@back = false
     @@exit = false
 
@@ -100,6 +99,4 @@ module ShortFind
         puts "Try again"
       end
     end
-
-  end
 end
