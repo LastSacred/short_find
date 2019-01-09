@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    short_find (1.0.7)
+    short_find (1.0.8)
 
 GEM
   remote: https://rubygems.org/

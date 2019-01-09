@@ -126,48 +126,47 @@ RSpec.describe ShortFind do
       end
 
     end
+    context "when searching by key" do
+      context "when one match is found" do
+        context "when the key is a string" do
+          it "returns an element" do
+            allow(ShortFind).to receive(:gets).and_return("on")
+            expect(ShortFind.in_hash(HASH, :key)).to eq "one" => "onev"
+          end
+        end
+
+        context "when the key is a symbol" do
+          it "returns an element" do
+            allow(ShortFind).to receive(:gets).and_return("tw")
+            expect(ShortFind.in_hash(HASH, :key)).to eq :two => "twov"
+          end
+        end
+      end
+
+      context "when no match is found" do
+        it "puts no match found error" do
+          ShortFind.use_back(true)
+          allow(ShortFind).to receive(:gets).and_return("www", "back")
+          expect($stdout).to receive(:puts).with("")
+          expect($stdout).to receive(:puts).with("No match found")
+          expect($stdout).to receive(:puts).with("Try again")
+          ShortFind.in_hash(HASH, :key)
+        end
+      end
+
+      context "when multiple matches are found" do
+        it "puts multiple match found error" do
+          ShortFind.use_back(true)
+          allow(ShortFind).to receive(:gets).and_return("t", "back")
+          expect($stdout).to receive(:puts).with("").exactly(3).times
+          expect($stdout).to receive(:puts).with("Multiple matches found")
+          expect($stdout).to receive(:puts).with(:two)
+          expect($stdout).to receive(:puts).with(:three)
+          expect($stdout).to receive(:puts).with("Try again")
+          ShortFind.in_hash(HASH, :key)
+        end
+      end
   end
-
-  context "when searching by key" do
-    context "when one match is found" do
-      context "when the key is a string" do
-        it "returns an element" do
-          allow(ShortFind).to receive(:gets).and_return("on")
-          expect(ShortFind.in_hash(HASH, :key)).to eq "one" => "onev"
-        end
-      end
-
-      context "when the key is a symbol" do
-        it "returns an element" do
-          allow(ShortFind).to receive(:gets).and_return("tw")
-          expect(ShortFind.in_hash(HASH, :key)).to eq :two => "twov"
-        end
-      end
-    end
-
-    context "when no match is found" do
-      it "puts no match found error" do
-        ShortFind.use_back(true)
-        allow(ShortFind).to receive(:gets).and_return("www", "back")
-        expect($stdout).to receive(:puts).with("")
-        expect($stdout).to receive(:puts).with("No match found")
-        expect($stdout).to receive(:puts).with("Try again")
-        ShortFind.in_hash(HASH, :key)
-      end
-    end
-
-    context "when multiple matches are found" do
-      it "puts multiple match found error" do
-        ShortFind.use_back(true)
-        allow(ShortFind).to receive(:gets).and_return("t", "back")
-        expect($stdout).to receive(:puts).with("").exactly(3).times
-        expect($stdout).to receive(:puts).with("Multiple matches found")
-        expect($stdout).to receive(:puts).with(:two)
-        expect($stdout).to receive(:puts).with(:three)
-        expect($stdout).to receive(:puts).with("Try again")
-        ShortFind.in_hash(HASH, :key)
-      end
-    end
 
     it "ignores case, spaces and special characters in the key" do
       allow(ShortFind).to receive(:gets).and_return("fourt")
